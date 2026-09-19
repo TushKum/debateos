@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Arena — DebateOS</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.arena{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media(max-width:960px){.arena{grid-template-columns:1fr}}
+video{width:100%;border-radius:12px;background:#0b1533;aspect-ratio:16/9;object-fit:cover;transform:scaleX(-1)}
+.rec{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#fca5a5}
+.rec:before{content:"";width:9px;height:9px;border-radius:50%;background:#ef4444;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.3}}
+.clock{font-size:54px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-2px}
+.live{min-height:160px;max-height:300px;overflow:auto;white-space:pre-wrap;background:#fff;color:var(--ink);border-radius:10px;padding:12px;font-size:15px}
+.live .interim{color:var(--muted)}
+.flow{max-height:75vh;overflow:auto}
+.entry{border-left:3px solid var(--line);padding:8px 12px;margin-bottom:12px}
+.entry.ai{border-color:var(--cyan)}.entry.user{border-color:var(--navy)}
+.entry.pending{opacity:.55}
+.entry h4{margin:0 0 4px;font-size:14px}
+.entry .text{white-space:pre-wrap;font-size:14px}
+.arg{background:var(--mist);border-radius:8px;padding:8px 10px;margin-top:6px;font-size:13px}
+.spinner{width:18px;height:18px;border:3px solid #cbd5e1;border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.assign{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:14px;align-items:center}
+.score{font-size:48px;font-weight:900;color:var(--navy)}
+.meter{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.poi{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;border-radius:10px;padding:10px;font-size:14px}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="pageHead"><div><div class="eyebrow">AI Arena</div><h1>Debate against AI</h1>
+    <p class="muted" style="margin:0">Speak with your camera and mic on, get live transcription, then an adjudication report.</p></div>
+    <a class="btn ghost" href="#history" id="historyLink">Past debates</a></div>
+
+  <!-- setup -->
+  <section id="setup" class="grid g2">
+    <div class="card">
+      <h2>1. Round setup</h2>
+      <label class="field"><span>Format</span><select id="format"></select></label>
+      <label class="field"><span>Motion</span><textarea id="motion" rows="3" placeholder="This House would…"></textarea></label>
+      <div class="row" style="margin:-4px 0 12px"><button class="btn sm ghost" id="randomMotion" type="button">🎲 Random WUDC / EUDC / Australs / ABP motion</button></div>
+      <label class="field"><span>Info slide (optional)</span><textarea id="infoslide" rows="3"></textarea></label>
+      <div class="grid g2">
+        <label class="field"><span>Your side</span><select id="side"></select></label>
+        <label class="field"><span>AI level</span><select id="difficulty"><option value="novice">Novice</option><option value="open" selected>Open</option><option value="finals">WUDC finalist</option></select></label>
+      </div>
+      <p class="small muted" id="rules"></p>
+    </div>
+    <div class="card">
+      <h2>2. Speeches & devices</h2>
+      <p class="small muted" style="margin-top:0">Tick the speeches you will give. The AI delivers everything else (teammates and opponents).</p>
+      <div class="assign" id="assign"></div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+      <label class="row small"><input type="checkbox" id="useCam" checked> Camera on (recorded, stays on your device)</label>
+      <label class="row small"><input type="checkbox" id="useMic" checked> Microphone + live transcription</label>
+      <label class="row small"><input type="checkbox" id="tts"> Read AI speeches aloud</label>
+      <label class="field" style="margin-top:10px"><span>Transcription accent</span><select id="lang"><option value="en-GB">English (UK)</option><option value="en-US">English (US)</option><option value="en-IN">English (India)</option><option value="en-AU">English (Australia)</option></select></label>
+      <div id="support" class="notice warn" hidden></div>
+      <button class="btn cyan lg" style="width:100%;margin-top:10px" id="startRound" type="button">Start round →</button>
+      <p class="tiny muted">Requires a free account. Recordings are never uploaded; only the text transcript is sent to the AI.</p>
+    </div>
+  </section>
+
+  <!-- round -->
+  <section id="round" class="arena" hidden>
+    <div class="card dark stack">
+      <div class="row spread"><div><div class="small" style="opacity:.7" id="curSide"></div><h2 style="margin:2px 0" id="curTitle"></h2></div><span class="rec" id="recBadge" hidden>REC</span></div>
+      <video id="video" autoplay muted playsinline hidden></video>
+      <div class="row spread"><div class="clock" id="clock">00:00</div><div class="small" style="opacity:.8;text-align:right" id="clockHint"></div></div>
+      <div class="poi" id="poiBox" hidden></div>
+      <div id="userPanel" class="stack" hidden>
+        <div class="live" id="live" aria-live="polite"></div>
+        <details><summary class="small" style="cursor:pointer">Edit / type your speech</summary><textarea id="manual" rows="6" style="margin-top:8px" placeholder="Transcription goes here. You can type or fix words."></textarea></details>
+        <div class="row"><button class="btn cyan" id="speakBtn" type="button">Start speaking</button><button class="btn ghost" id="finishBtn" type="button">Finish speech →</button></div>
+      </div>
+      <div id="aiPanel" class="stack" hidden>
+        <p id="aiStatus"></p>
+        <div class="row"><button class="btn ghost" id="stopTts" type="button" hidden>Stop reading</button><button class="btn cyan" id="continueBtn" type="button" hidden>Continue →</button></div>
+      </div>
+      <div class="row spread"><span class="small" style="opacity:.7" id="progressText"></span><button class="btn sm danger" id="endEarly" type="button">End & get feedback</button></div>
+    </div>
+    <div class="card flow"><h3>Round transcript</h3><div id="flow"></div></div>
+  </section>
+
+  <!-- report -->
+  <section id="reportView" hidden>
+    <div class="card stack" id="report"></div>
+  </section>
+
+  <section id="history" class="card" style="margin-top:28px"><h2>Past AI debates</h2><div id="historyList" class="small muted">Log in to see your past debates.</div></section>
+</main>
+<script type="module" src="assets/js/pages/arena.js"></script>
+</body>
+</html>

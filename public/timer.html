@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Timer & Motion Generator — DebateOS</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.speeches{list-style:none;margin:0;padding:0}
+.speeches li button{width:100%;text-align:left;background:none;border:0;border-radius:9px;padding:9px 10px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.speeches li button:hover{background:var(--mist)}
+.speeches li button.current{background:var(--midnight);color:#fff}
+.speeches li button.done{color:var(--muted);text-decoration:line-through}
+.side{font-size:11px;font-weight:800;opacity:.7}
+.stage{background:var(--midnight);color:#fff;border-radius:20px;padding:28px;text-align:center;position:relative}
+.stage:fullscreen{display:flex;flex-direction:column;justify-content:center;border-radius:0}
+.clock{font-size:clamp(80px,16vw,200px);font-weight:900;font-variant-numeric:tabular-nums;line-height:1;margin:10px 0;letter-spacing:-4px}
+.clock.warn{color:#fbbf24}.clock.over{color:#f87171}
+.status{display:inline-block;padding:6px 14px;border-radius:30px;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.status.protected{background:#334155}.status.open{background:var(--cyan);color:var(--midnight)}.status.over{background:#b91c1c}
+.progress{height:6px;background:#1e3a5f;border-radius:6px;overflow:hidden;margin:18px 0}.progress i{display:block;height:100%;background:var(--cyan);width:0;transition:width .3s linear}
+.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.motionBox{font-size:20px;font-weight:750;line-height:1.35;margin:10px 0}
+.info{white-space:pre-wrap;background:var(--mist);border-radius:10px;padding:12px;font-size:14px}
+.bank{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:8px}
+.bank strong{font-variant-numeric:tabular-nums;font-size:22px}
+kbd{background:#eef2f8;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:12px}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="pageHead"><div><div class="eyebrow">Practice tools</div><h1>Timer & Motion Generator</h1></div>
+    <div class="row"><label class="field" style="margin:0;min-width:260px"><span>Format</span><select id="format"></select></label></div></div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="row spread">
+      <h2 style="margin:0">Motion generator</h2>
+      <div class="row">
+        <select id="mTour" style="width:auto"><option value="">All championships</option></select>
+        <select id="mYear" style="width:auto"><option value="">Any year</option></select>
+        <select id="mStage" style="width:auto"><option value="">Any stage</option><option value="in">In-rounds</option><option value="out">Out-rounds / finals</option></select>
+        <button class="btn cyan" id="generate" type="button">🎲 Generate motion</button>
+      </div>
+    </div>
+    <div id="motionOut" class="stack" style="margin-top:12px"><p class="muted">Pick filters and generate a real motion from WUDC, EUDC, Australs or ABP.</p></div>
+  </div>
+
+  <div class="layout">
+    <aside class="card">
+      <h3 id="fmtName" style="margin-bottom:4px"></h3>
+      <p class="small muted" id="fmtRules"></p>
+      <div id="prepArea"></div>
+      <h3 style="margin:16px 0 6px">Speeches</h3>
+      <ol class="speeches" id="speeches"></ol>
+      <p class="tiny muted" style="margin-top:14px">Keys: <kbd>Space</kbd> start/pause · <kbd>N</kbd> next · <kbd>R</kbd> reset · <kbd>F</kbd> fullscreen</p>
+      <p class="tiny muted">Rules source: <a id="fmtSource" target="_blank" rel="noopener">official guide</a></p>
+    </aside>
+
+    <section class="stage" id="stage">
+      <div class="row spread" style="justify-content:space-between">
+        <span class="small" id="stageSide" style="opacity:.75"></span>
+        <label class="small row" style="gap:6px;opacity:.85"><input type="checkbox" id="countDown"> Count down</label>
+      </div>
+      <h2 id="stageTitle" style="margin:8px 0 0;font-size:28px"></h2>
+      <div class="clock" id="clock">00:00</div>
+      <div><span class="status protected" id="status">Ready</span></div>
+      <div class="progress"><i id="progress"></i></div>
+      <div class="controls">
+        <button class="btn cyan lg" id="startBtn" type="button">Start</button>
+        <button class="btn ghost lg" id="resetBtn" type="button">Reset</button>
+        <button class="btn ghost lg" id="nextBtn" type="button">Next speech →</button>
+        <button class="btn ghost lg" id="fsBtn" type="button">⛶</button>
+        <button class="btn ghost lg" id="bellBtn" type="button" title="Ring bell">🔔</button>
+      </div>
+      <p class="small" id="bellHint" style="opacity:.7;margin-top:16px"></p>
+    </section>
+  </div>
+</main>
+<script type="module" src="assets/js/pages/timer.js"></script>
+</body>
+</html>

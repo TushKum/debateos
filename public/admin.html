@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Dashboard — DebateOS</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>.stat .v{font-size:28px;font-weight:900;margin-top:4px}.stat .l{color:var(--muted);font-size:13px}</style>
+</head>
+<body>
+<main class="page">
+  <div class="pageHead"><div><div class="eyebrow">DebateOS</div><h1>Admin Dashboard</h1></div><button class="btn ghost" id="refresh" type="button">Refresh</button></div>
+  <div class="tabs">
+    <button class="active" data-tab="overview" type="button">Overview</button>
+    <button data-tab="users" type="button">Users</button>
+    <button data-tab="logins" type="button">Login activity</button>
+    <button data-tab="knowledge" type="button">AI knowledge base</button>
+    <button data-tab="tournaments" type="button">Tournaments</button>
+  </div>
+
+  <section data-panel="overview">
+    <div class="grid g4" id="stats"></div>
+    <div class="card" style="margin-top:16px"><h3>Users by circuit role</h3><div id="roles"></div></div>
+  </section>
+
+  <section data-panel="users" hidden>
+    <input id="userSearch" placeholder="Search users…" style="max-width:320px;margin-bottom:12px">
+    <div class="tableWrap"><table><thead><tr><th>User</th><th>Circuit role</th><th>Joined</th><th>Last seen</th><th>Logins</th><th>AI debates</th><th>Access</th><th></th></tr></thead><tbody id="userRows"></tbody></table></div>
+  </section>
+
+  <section data-panel="logins" hidden>
+    <div class="tableWrap"><table><thead><tr><th>User</th><th>Email</th><th>Time</th><th>IP</th><th>Device</th></tr></thead><tbody id="loginRows"></tbody></table></div>
+  </section>
+
+  <section data-panel="knowledge" hidden>
+    <div class="notice" style="margin-bottom:16px">Material added here is included in the AI debater's and adjudicator's instructions for every round — for example notes on WUDC Grand Final speeches, adjudication guidance, or matter files you have the right to use. Built-in principles from the WUDC Debating & Judging Manual are always included.</div>
+    <form class="card" id="kForm" style="margin-bottom:16px">
+      <div class="grid g2"><label class="field"><span>Title</span><input id="kTitle" required placeholder="WUDC 2024 Grand Final — speech notes"></label>
+        <label class="field"><span>Source link (optional)</span><input id="kUrl" type="url" placeholder="https://www.youtube.com/watch?v=…"></label></div>
+      <label class="field"><span>Content</span><textarea id="kContent" rows="8" required placeholder="Key arguments, framing, weighing, what made the winning team persuasive…"></textarea></label>
+      <div class="row spread"><button class="btn" type="submit">Add to knowledge base</button><span class="small muted" id="kSize"></span></div>
+    </form>
+    <div id="kList" class="stack"></div>
+  </section>
+
+  <section data-panel="tournaments" hidden>
+    <div class="tableWrap"><table><thead><tr><th>Tournament</th><th>Owner</th><th>Format</th><th>Teams</th><th>Public</th><th></th></tr></thead><tbody id="tRows"></tbody></table></div>
+  </section>
+</main>
+<script type="module" src="assets/js/pages/admin.js"></script>
+</body>
+</html>

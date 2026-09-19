@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resources — DebateOS</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.res{display:flex;gap:12px;align-items:flex-start;text-decoration:none}
+.res .ic{flex:none;width:42px;height:42px;border-radius:10px;background:var(--cyan-soft);display:grid;place-items:center;font-weight:900;color:var(--navy);font-size:12px}
+.res h3{margin:0 0 4px;font-size:16px}.res p{margin:0}
+.video{text-decoration:none;display:block;padding:0;overflow:hidden}
+.video img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0b1533}
+.video div{padding:12px 14px}.video h3{margin:0 0 4px;font-size:15px}
+section+section{margin-top:40px}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="pageHead"><div><div class="eyebrow">Library</div><h1>Resources</h1><p class="muted" style="margin:0">Official manuals, Grand Final recordings and format rulebooks.</p></div>
+    <input id="filter" placeholder="Filter resources…" style="max-width:280px"></div>
+
+  <section><h2>WUDC manuals</h2><div class="grid g2" id="manuals"></div></section>
+  <section><h2>WUDC finals & recordings</h2><div class="grid g3" id="videos"></div></section>
+  <section><h2>Format rulebooks & guides</h2><div class="grid g2" id="guides"></div></section>
+  <section><h2>Motion banks & tabs</h2><div class="grid g2" id="banks"></div></section>
+</main>
+<script type="module" src="assets/js/pages/resources.js"></script>
+</body>
+</html>

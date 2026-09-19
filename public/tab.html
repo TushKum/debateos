@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Host a Tab — DebateOS</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.debate{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
+.debate .teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}
+.debate .teams div{background:var(--mist);border-radius:8px;padding:6px 8px;font-size:13px}
+.pos{font-size:10px;font-weight:800;color:var(--navy2);display:block}
+.links a{font-size:12px;margin-right:8px}
+.roundHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.check{display:inline-flex;gap:6px;align-items:center;font-size:13px;margin-right:12px}
+.ballotGrid{display:grid;grid-template-columns:1fr 110px;gap:6px 10px;align-items:center;font-size:14px}
+code{background:#eef2f8;padding:2px 5px;border-radius:5px;font-size:12px}
+</style>
+</head>
+<body>
+<main class="page">
+  <section id="listView">
+    <div class="pageHead"><div><div class="eyebrow">Tournament hosting</div><h1>Host a Tab</h1>
+      <p class="muted" style="margin:0">Run draws, allocations, ballots and standings — with Google Meet and Discord links for every room.</p></div></div>
+    <div class="grid g2">
+      <form class="card" id="createForm">
+        <h2>Create a tournament</h2>
+        <label class="field"><span>Name</span><input id="cName" required placeholder="KGP Parliamentary Debate 2026"></label>
+        <div class="grid g2">
+          <label class="field"><span>Format</span><select id="cFormat"><option value="bp">British Parliamentary (4 teams of 2)</option><option value="twoteam">Two-team (WSDC, APD, CNPD, PF…)</option></select></label>
+          <label class="field" id="sptWrap" hidden><span>Speakers per team</span><select id="cSpt"><option>2</option><option selected>3</option><option>4</option><option>1</option></select></label>
+          <label class="field"><span>URL name</span><input id="cSlug" placeholder="kgppd26" pattern="[a-z0-9-]{3,50}"></label>
+          <label class="field"><span>Start date</span><input id="cDate" type="date"></label>
+        </div>
+        <label class="field"><span>Discord server invite (optional)</span><input id="cDiscord" type="url" placeholder="https://discord.gg/…"></label>
+        <label class="field"><span>Main Google Meet link — briefings, break announcements (optional)</span><input id="cMeet" type="url" placeholder="https://meet.google.com/…"></label>
+        <button class="btn" type="submit">Create tournament</button>
+      </form>
+      <div class="card"><h2>Your tournaments</h2><div id="mine" class="stack"><p class="muted">Loading…</p></div></div>
+    </div>
+  </section>
+
+  <section id="manageView" hidden>
+    <div class="pageHead">
+      <div><a href="tab.html" class="small muted">← All tournaments</a><h1 id="tName"></h1>
+        <div class="row small"><span class="pill" id="tFormat"></span><a id="publicLink" target="_blank" rel="noopener">Public tab ↗</a></div></div>
+      <div class="row"><a class="btn ghost" id="discordBtn" target="_blank" rel="noopener" hidden>Discord ↗</a><a class="btn ghost" id="meetBtn" target="_blank" rel="noopener" hidden>Google Meet ↗</a></div>
+    </div>
+    <div class="tabs">
+      <button class="active" data-tab="rounds" type="button">Rounds & draws</button>
+      <button data-tab="teams" type="button">Teams</button>
+      <button data-tab="adjs" type="button">Adjudicators</button>
+      <button data-tab="rooms" type="button">Rooms & links</button>
+      <button data-tab="standings" type="button">Standings</button>
+      <button data-tab="settings" type="button">Settings & staff</button>
+    </div>
+
+    <section data-panel="rounds">
+      <form class="card row" id="roundForm" style="margin-bottom:16px">
+        <input id="rName" placeholder="Round name (default Round N)" style="flex:1;min-width:160px">
+        <input id="rMotion" placeholder="Motion (can be added later)" style="flex:3;min-width:220px">
+        <button class="btn" type="submit">Add round</button>
+      </form>
+      <div id="rounds" class="stack"></div>
+    </section>
+
+    <section data-panel="teams" hidden>
+      <div class="grid g2" style="margin-bottom:16px">
+        <form class="card" id="teamForm"><h3>Add a team</h3>
+          <div class="grid g2"><label class="field"><span>Team name</span><input id="tmName" required></label><label class="field"><span>Institution</span><input id="tmInst"></label></div>
+          <div id="speakerInputs" class="grid g2"></div>
+          <button class="btn" type="submit">Add team</button></form>
+        <form class="card" id="bulkTeams"><h3>Bulk import</h3>
+          <p class="small muted">One team per line: <code>Team name, Institution, Speaker 1, Speaker 2…</code></p>
+          <textarea id="bulkTeamText" rows="6"></textarea><button class="btn ghost" type="submit">Import teams</button></form>
+      </div>
+      <div class="tableWrap"><table><thead><tr><th>Team</th><th>Institution</th><th>Speakers</th><th>Private link</th><th></th></tr></thead><tbody id="teamRows"></tbody></table></div>
+    </section>
+
+    <section data-panel="adjs" hidden>
+      <div class="grid g2" style="margin-bottom:16px">
+        <form class="card" id="adjForm"><h3>Add an adjudicator</h3>
+          <div class="grid g2"><label class="field"><span>Name</span><input id="aName" required></label><label class="field"><span>Institution</span><input id="aInst"></label>
+          <label class="field"><span>Rating (0–10)</span><input id="aRating" type="number" min="0" max="10" step="0.5" value="5"></label>
+          <label class="field"><span>&nbsp;</span><span class="check"><input type="checkbox" id="aIa"> Independent adjudicator (IA)</span></label></div>
+          <button class="btn" type="submit">Add adjudicator</button></form>
+        <form class="card" id="bulkAdjs"><h3>Bulk import</h3>
+          <p class="small muted">One per line: <code>Name, Institution, Rating, IA(yes/no)</code></p>
+          <textarea id="bulkAdjText" rows="6"></textarea><button class="btn ghost" type="submit">Import adjudicators</button></form>
+      </div>
+      <div class="tableWrap"><table><thead><tr><th>Name</th><th>Institution</th><th>Rating</th><th>IA</th><th>Private ballot link</th><th></th></tr></thead><tbody id="adjRows"></tbody></table></div>
+    </section>
+
+    <section data-panel="rooms" hidden>
+      <form class="card" id="roomForm" style="margin-bottom:16px">
+        <div class="grid g3">
+          <label class="field"><span>Room name</span><input id="vName" required placeholder="Room 1"></label>
+          <label class="field"><span>Google Meet link</span><input id="vMeet" type="url" placeholder="https://meet.google.com/…"></label>
+          <label class="field"><span>Discord voice channel link</span><input id="vDiscord" type="url" placeholder="https://discord.com/channels/…"></label>
+        </div>
+        <div class="row"><button class="btn" type="submit">Add room</button><a class="btn ghost" href="https://meet.google.com/new" target="_blank" rel="noopener">Create a new Meet ↗</a>
+          <span class="small muted">Create a Meet, copy its link, paste it here. Participants see it on their private pages and the public draw.</span></div>
+      </form>
+      <div class="tableWrap"><table><thead><tr><th>Room</th><th>Google Meet</th><th>Discord</th><th></th></tr></thead><tbody id="roomRows"></tbody></table></div>
+    </section>
+
+    <section data-panel="standings" hidden>
+      <div class="grid g2"><div><h3>Team standings</h3><div class="tableWrap"><table><thead><tr><th>#</th><th>Team</th><th id="ptsHead">Points</th><th>Speaks</th><th>Debates</th></tr></thead><tbody id="teamTab"></tbody></table></div></div>
+      <div><h3>Speaker standings</h3><div class="tableWrap"><table><thead><tr><th>#</th><th>Speaker</th><th>Team</th><th>Total</th><th>Avg</th></tr></thead><tbody id="speakerTab"></tbody></table></div></div></div>
+    </section>
+
+    <section data-panel="settings" hidden>
+      <div class="grid g2">
+        <form class="card" id="settingsForm"><h3>Tournament settings</h3>
+          <label class="field"><span>Name</span><input id="sName"></label>
+          <label class="field"><span>Description / schedule</span><textarea id="sDesc"></textarea></label>
+          <label class="field"><span>Start date</span><input id="sDate" type="date"></label>
+          <label class="field"><span>Discord server invite</span><input id="sDiscord" type="url"></label>
+          <label class="field"><span>Main Google Meet link</span><input id="sMeet" type="url"></label>
+          <p><span class="check"><input type="checkbox" id="sPublic"> Listed publicly</span><span class="check"><input type="checkbox" id="sTab"> Release team & speaker tab</span></p>
+          <button class="btn" type="submit">Save</button></form>
+        <div class="stack">
+          <form class="card" id="staffForm"><h3>Staff (Tab / CAP / Equity)</h3>
+            <p class="small muted">Staff can manage the tournament. They need a DebateOS account.</p>
+            <div class="row"><input id="stEmail" type="email" placeholder="email@example.com" style="flex:2" required><select id="stRole" style="flex:1"><option value="tab">Tab</option><option value="cap">CAP</option><option value="equity">Equity</option></select><button class="btn" type="submit">Add</button></div>
+            <div id="staffList" class="small" style="margin-top:12px"></div></form>
+          <div class="card"><h3>Danger zone</h3><button class="btn danger" id="deleteT" type="button">Delete tournament</button></div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <div class="modal" id="modal" hidden><div class="modalBox" id="modalBox"></div></div>
+</main>
+<script type="module" src="assets/js/pages/tab.js"></script>
+</body>
+</html>

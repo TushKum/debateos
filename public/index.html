@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DebateOS — Practice. Be Judged. Grow.</title>
+<meta name="description" content="DebateOS: debate timers and motions, AI practice rounds, tournament hosting, the global tournament calendar and a network for debaters, adjudicators, CAPs, tab and equity.">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.hero{background:radial-gradient(circle at 80% 20%,#123F7A 0,#071A36 42%,#041225 100%);color:#fff;padding:80px 4% 84px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:500px;height:500px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-130px;top:-170px;box-shadow:0 0 0 70px rgba(255,255,255,.025),0 0 0 140px rgba(255,255,255,.018)}
+.heroGrid{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;position:relative;z-index:2}
+.hero .eyebrow{color:#7DDFF0}.hero h1{font-size:clamp(42px,6vw,70px);line-height:.98;letter-spacing:-3px;margin:14px 0 22px}.hero h1 span{color:var(--cyan)}
+.hero p{font-size:18px;line-height:1.65;color:#D9EDF2;max-width:620px}
+.preview p{color:var(--ink)}.preview{background:#fff;border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.3);padding:18px;color:var(--ink)}
+.bigclock{font-size:64px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--navy);text-align:center;margin:8px 0}
+section.band{padding:72px 4%}.wrap{max-width:1200px;margin:auto}
+.feature{background:#fff;border:1px solid var(--line);padding:24px;border-radius:17px;transition:.2s;text-decoration:none;display:block}
+.feature:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(37,99,235,.09)}
+.feature .icon{width:44px;height:44px;border-radius:12px;background:var(--mist);color:var(--navy);display:grid;place-items:center;font-weight:900;margin-bottom:14px;font-size:13px}
+.feature h3{margin:0 0 6px}.feature p{margin:0;color:var(--muted);font-size:14px}
+.role{border:1px solid var(--line);padding:17px;border-radius:12px;background:#fff}.role b{display:block;margin-bottom:4px}.role span{font-size:13px;color:var(--muted)}
+.cta{background:linear-gradient(120deg,#E6F9FC,#fff);border:1px solid var(--line);border-radius:24px;padding:48px;text-align:center}
+@media(max-width:850px){.heroGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="heroGrid">
+    <div>
+      <div class="eyebrow">DebateOS Beta · Live now</div>
+      <h1>Practice. Be Judged. <span>Grow.</span></h1>
+      <p>One platform for competitive debate: timers and real championship motions, AI sparring with live transcription and feedback, tournament hosting with draws and ballots, the global tournament calendar, and a network for the whole circuit.</p>
+      <div class="row" style="margin-top:28px">
+        <a class="btn cyan lg" href="arena.html">Debate the AI →</a>
+        <a class="btn ghost lg" href="timer.html">Open the timer</a>
+        <a class="btn lg" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)" href="https://chat.whatsapp.com/LuuRNcfq2uzA0aQo1KLOmv" target="_blank" rel="noopener">Join WhatsApp</a>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="row spread"><strong>Motion generator</strong><span class="pill" id="pMeta">WUDC</span></div>
+      <p id="pMotion" style="font-size:18px;font-weight:700;margin:14px 0 4px">Loading a championship motion…</p>
+      <div class="bigclock">07:00</div>
+      <div class="row spread"><span class="small muted">Prime Minister · BP</span><a class="btn sm" href="timer.html">Start prep →</a></div>
+    </div>
+  </div>
+</header>
+
+<section class="band" id="platform"><div class="wrap">
+  <div class="eyebrow">Everything debate, in one place</div>
+  <h2 style="font-size:40px;margin:6px 0 28px">What you can do today</h2>
+  <div class="grid g3">
+    <a class="feature" href="tournaments.html"><div class="icon">CAL</div><h3>Tournaments</h3><p>The Official Global Debating Spreadsheet — search upcoming competitions by month, mode and fees — plus tournaments hosted on DebateOS.</p></a>
+    <a class="feature" href="timer.html"><div class="icon">⏱</div><h3>Timer & Motion Generator</h3><p>Speech-by-speech timers with POI bells for BP, WSDC, APD, CNPD, LD, Policy, PF and Original Oratory. Motions from WUDC, EUDC, Australs and ABP.</p></a>
+    <a class="feature" href="arena.html"><div class="icon">AI</div><h3>Debate the AI</h3><p>Turn on your camera and mic, speak with live transcription, face an AI opponent, then get an adjudication report and download your recording.</p></a>
+    <a class="feature" href="network.html"><div class="icon">NET</div><h3>Debate Network</h3><p>Find debaters, adjudicators, IAs, CAPs, tab directors and equity officers. Connect and message directly.</p></a>
+    <a class="feature" href="tab.html"><div class="icon">TAB</div><h3>Host a Tab</h3><p>Run your tournament: teams, adjudicators, power-paired draws, allocations, online ballots, standings, plus Google Meet and Discord links per room.</p></a>
+    <a class="feature" href="resources.html"><div class="icon">DOC</div><h3>Resources</h3><p>WUDC Debating & Judging manuals, Grand Final recordings and format rulebooks in one library.</p></a>
+  </div>
+</div></section>
+
+<section class="band" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <div class="eyebrow">Built for the whole circuit</div>
+  <h2 style="font-size:40px;margin:6px 0 28px">Every role has a place.</h2>
+  <div class="grid g3">
+    <div class="role"><b>Debaters</b><span>Practice against AI, track feedback, find tournaments and teammates.</span></div>
+    <div class="role"><b>Adjudicators / IAs</b><span>Private allocation pages and online ballots when judging on a DebateOS tab.</span></div>
+    <div class="role"><b>TAB Directors</b><span>Draws, allocations, results, standings and public tab release.</span></div>
+    <div class="role"><b>CAP</b><span>Motion and info-slide release, adjudicator ratings and panel edits.</span></div>
+    <div class="role"><b>Equity</b><span>Direct messaging with participants and staff access to tournaments.</span></div>
+    <div class="role"><b>Coaches & Organisers</b><span>Training rounds, motion banks and community connections.</span></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap"><div class="cta">
+  <div class="eyebrow">Beta is open</div>
+  <h2 style="font-size:38px;margin:6px 0 10px">Join the DebateOS community.</h2>
+  <p class="muted" style="max-width:620px;margin:0 auto 22px">Create a free account to debate the AI, host tournaments and message people across the circuit.</p>
+  <div class="row" style="justify-content:center"><a class="btn lg" href="auth.html?mode=register">Create account →</a><a class="btn ghost lg" href="https://chat.whatsapp.com/LuuRNcfq2uzA0aQo1KLOmv" target="_blank" rel="noopener">Join WhatsApp Group</a></div>
+</div></div></section>
+
+<script type="module" src="assets/js/pages/index.js"></script>
+</body>
+</html>

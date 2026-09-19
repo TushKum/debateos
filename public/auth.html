@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DebateOS — Login</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<main class="page" style="max-width:500px">
+  <div class="card" style="padding:30px;box-shadow:var(--shadow)">
+    <h1 id="heading" style="margin:0 0 6px">Welcome back</h1>
+    <p class="muted" id="intro" style="margin:0 0 20px">Sign in to your DebateOS account.</p>
+    <div class="tabs"><button id="loginTab" class="active" type="button">Login</button><button id="registerTab" type="button">Create account</button></div>
+    <form id="form">
+      <div id="registerFields" hidden>
+        <label class="field"><span>Name</span><input id="name" autocomplete="name" placeholder="Your name"></label>
+        <label class="field"><span>I am a…</span><select id="circuitRole"></select></label>
+        <label class="field"><span>Institution / club (optional)</span><input id="institution" placeholder="e.g. Delhi University"></label>
+      </div>
+      <label class="field"><span>Email</span><input id="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label class="field"><span>Password</span><input id="password" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></label>
+      <button class="btn" style="width:100%" id="submit" type="submit">Login</button>
+    </form>
+    <p class="small" id="msg" role="status" aria-live="polite" style="min-height:20px"></p>
+  </div>
+</main>
+<script type="module" src="assets/js/pages/auth.js"></script>
+</body>
+</html>

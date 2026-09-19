@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tournament — DebateOS</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.debate{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
+.debate .teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}
+.debate .teams div{background:var(--mist);border-radius:8px;padding:6px 8px;font-size:13px}
+.debate .teams div.mine{background:var(--cyan-soft);outline:2px solid var(--cyan)}
+.pos{font-size:10px;font-weight:800;color:var(--navy2);display:block}
+.motion{font-size:18px;font-weight:700}
+.join{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.check{display:inline-flex;gap:6px;align-items:center;font-size:13px}
+.ballotGrid{display:grid;grid-template-columns:1fr 110px;gap:6px 10px;align-items:center;font-size:14px}
+</style>
+</head>
+<body>
+<main class="page" id="root"><p class="empty">Loading tournament…</p></main>
+<script type="module" src="assets/js/pages/t.js"></script>
+</body>
+</html>
